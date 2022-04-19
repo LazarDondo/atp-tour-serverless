@@ -12,52 +12,26 @@ provider:
   region: eu-west-1
   environment:
     TOURNAMENT_TABLE_NAME: ${self:custom.TournamentTable.name}
+    PLAYER_TABLE_NAME: ${self:custom.PlayerTable.name}
   iamRoleStatements:
     - ${file(iam/TournamentTableIAM.yml):TournamentTableIAM}
+    - ${file(iam/PlayerTableIAM.yml):PlayerTableIAM}
 
 resources:
   Resources:
     TournamentTable: ${file(resources/TournamentTable.yml):TournamentTable}
+    PlayerTable: ${file(resources/PlayerTable.yml):PlayerTable}
   
 functions:
-  createTournament:
-    handler: src/handlers/tournament/createTournament.handler
-    events:
-      - http:
-          method: POST
-          path: /tournament
-
-  getTournament:
-    handler: src/handlers/tournament/getTournament.handler
-    events:
-      - http:
-          method: GET
-          path: /tournament/{id}
-
-  getTournaments:
-    handler: src/handlers/tournament/getTournaments.handler
-    events:
-      - http:
-          method: GET
-          path: /tournament
-
-  updateTournament:
-    handler: src/handlers/tournament/updateTournament.handler
-    events:
-      - http:
-          method: PATCH
-          path: /tournament/{id}
-
-  deleteTournament:
-    handler: src/handlers/tournament/deleteTournament.handler
-    events:
-      - http:
-          method: DELETE
-          path: /tournament/{id}
+  - ${file(functions/TournamentFunctions.yml)}
+  - ${file(functions/PlayerFunctions.yml)}
 
 custom:
   TournamentTable:
     name: !Ref TournamentTable
     arn: !GetAtt TournamentTable.Arn
+  PlayerTable:
+    name: !Ref PlayerTable
+    arn: !GetAtt PlayerTable.Arn
   bundle:
     linting: false

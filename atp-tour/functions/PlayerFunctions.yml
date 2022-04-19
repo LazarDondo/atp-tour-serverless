@@ -1,0 +1,6 @@
+createPlayer:
+  handler: src/handlers/player/createPlayer.handler
+  events:
+    - http:
+        method: POST
+        path: /player
