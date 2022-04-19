@@ -10,7 +10,7 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 async function updateTournament(event, context) {
     const { id } = event.pathParameters;
     const { name, startDate } = event.body;
-    const tournament = getTournamentById(id);
+    await getTournamentById(id);
 
     const params = {
         TableName: process.env.TOURNAMENT_TABLE_NAME,
