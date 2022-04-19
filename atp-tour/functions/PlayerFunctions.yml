@@ -18,3 +18,10 @@ getPlayers:
     - http:
         method: GET
         path: /player
+
+updatePlayer:
+  handler: src/handlers/player/updatePlayer.handler
+  events:
+    - http:
+        method: PATCH
+        path: /player/{id}
