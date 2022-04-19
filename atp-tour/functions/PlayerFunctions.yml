@@ -11,3 +11,10 @@ getPlayer:
     - http:
         method: GET
         path: /player/{id}
+
+getPlayers:
+  handler: src/handlers/player/getPlayers.handler
+  events:
+    - http:
+        method: GET
+        path: /player
