@@ -1,8 +1,8 @@
 const schema = {
     type: 'object',
-    properties:{
-        body:{
-            type:'object',
+    properties: {
+        body: {
+            type: 'object',
             properties: {
                 name: {
                     type: 'string'

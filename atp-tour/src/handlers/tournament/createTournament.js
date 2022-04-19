@@ -11,7 +11,7 @@ async function createTournament(event, context) {
     const { name, startDate, hostCountry, tournamentType } = event.body;
 
     let completionDate = new Date(startDate);
-    completionDate.setDate(completionDate.getDate()+7);
+    completionDate.setDate(completionDate.getDate() + 7);
 
     const tournament = {
         id: uuid(),
@@ -22,13 +22,13 @@ async function createTournament(event, context) {
         tournamentType
     }
 
-    try{
-    await dynamodb.put({
-        TableName: process.env.TOURNAMENT_TABLE_NAME,
-        Item: tournament
-    }).promise();
+    try {
+        await dynamodb.put({
+            TableName: process.env.TOURNAMENT_TABLE_NAME,
+            Item: tournament
+        }).promise();
     }
-    catch(error){
+    catch (error) {
         console.log(error);
         throw new createError.InternalServerError(error);
     }
@@ -39,6 +39,6 @@ async function createTournament(event, context) {
 }
 
 export const handler = commonMiddleware(createTournament)
-.use(validator({
-    inputSchema: createTournamentSchema
-}));
+    .use(validator({
+        inputSchema: createTournamentSchema
+    }));

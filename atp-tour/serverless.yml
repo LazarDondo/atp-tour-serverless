@@ -21,11 +21,18 @@ resources:
   
 functions:
   createTournament:
-    handler: src/handlers/tournament/create.handler
+    handler: src/handlers/tournament/createTournament.handler
     events:
       - http:
           method: POST
           path: /tournament
+
+  getTournament:
+    handler: src/handlers/tournament/getTournament.handler
+    events:
+      - http:
+          method: GET
+          path: /tournament/{id}
 
 custom:
   TournamentTable:
