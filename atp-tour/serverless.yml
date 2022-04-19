@@ -48,6 +48,13 @@ functions:
           method: PATCH
           path: /tournament/{id}
 
+  deleteTournament:
+    handler: src/handlers/tournament/deleteTournament.handler
+    events:
+      - http:
+          method: DELETE
+          path: /tournament/{id}
+
 custom:
   TournamentTable:
     name: !Ref TournamentTable
