@@ -34,6 +34,13 @@ functions:
           method: GET
           path: /tournament/{id}
 
+  getTournaments:
+    handler: src/handlers/tournament/getTournaments.handler
+    events:
+      - http:
+          method: GET
+          path: /tournament
+
 custom:
   TournamentTable:
     name: !Ref TournamentTable
