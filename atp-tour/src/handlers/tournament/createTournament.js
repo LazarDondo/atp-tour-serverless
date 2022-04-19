@@ -4,11 +4,14 @@ import commonMiddleware from '../../lib/commonMiddleware';
 import createError from 'http-errors';
 import validator from '@middy/validator';
 import createTournamentSchema from '../../lib/schemas/tournament/createTournamentSchema';
+import getCountryById from '../country/getCountry';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 async function createTournament(event, context) {
     const { name, startDate, hostCountry, tournamentType } = event.body;
+
+    await getCountryById(hostCountry);
 
     let completionDate = new Date(startDate);
     completionDate.setDate(completionDate.getDate() + 7);

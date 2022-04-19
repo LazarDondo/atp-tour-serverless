@@ -4,11 +4,14 @@ import commonMiddleware from '../../lib/commonMiddleware';
 import createError from 'http-errors';
 import validator from '@middy/validator';
 import createPlayerSchema from '../../lib/schemas/player/createPlayerSchema';
+import getCountryById from '../country/getCountry';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 async function createPlayer(event, context) {
     const {firstName, lastName, birthCountry, dateOfBirth, currentPoints} = event.body;
+
+    await getCountryById(birthCountry);
 
     const player = {
         id: uuid(),
