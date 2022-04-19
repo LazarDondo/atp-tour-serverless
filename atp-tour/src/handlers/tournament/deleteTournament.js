@@ -7,7 +7,7 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 async function deleteTournament(event, context){
     const {id} = event.pathParameters;
-    const tournament = getTournamentById(id);
+    await getTournamentById(id);
 
     const params = {
         TableName: process.env.TOURNAMENT_TABLE_NAME,
