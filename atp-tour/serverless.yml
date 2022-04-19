@@ -1,5 +1,4 @@
-service:
-  name: atp-tour
+service: atp-tour
 
 plugins:
   - serverless-bundle
@@ -14,19 +13,19 @@ provider:
   environment:
     TOURNAMENT_TABLE_NAME: ${self:custom.TournamentTable.name}
   iamRoleStatements:
-    - ${file(iam/TournamentIAM.yml):TournamentIAM}
+    - ${file(iam/TournamentTableIAM.yml):TournamentTableIAM}
 
 resources:
   Resources:
-    TournamentTable: $(file(resources/TournamentTable.yml):TournamentTable)
+    TournamentTable: ${file(resources/TournamentTable.yml):TournamentTable}
   
 functions:
-  hello:
-    handler: src/handlers/hello.handler
+  createTournament:
+    handler: src/handlers/tournament/create.handler
     events:
       - http:
-          method: GET
-          path: /hello
+          method: POST
+          path: /tournament
 
 custom:
   TournamentTable:

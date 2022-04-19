@@ -1,11 +1,11 @@
-Tournament:
+TournamentTable:
   Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: Tournament-${self:provider.stage}
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: id
-          KeyType: HASH
+  Properties:
+    TableName: Tournament-${self:provider.stage}
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+    KeySchema:
+      - AttributeName: id
+        KeyType: HASH

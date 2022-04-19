@@ -15,6 +15,14 @@
     "webpack": "^5.72.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.1116.0"
+    "@middy/core": "^2.5.7",
+    "@middy/http-cors": "^2.5.7",
+    "@middy/http-error-handler": "^2.5.7",
+    "@middy/http-event-normalizer": "^2.5.7",
+    "@middy/http-json-body-parser": "^2.5.7",
+    "@middy/validator": "^2.5.7",
+    "aws-sdk": "^2.1116.0",
+    "http-errors": "^2.0.0",
+    "uuid": "^8.3.2"
   }
 }
