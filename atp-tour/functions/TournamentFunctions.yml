@@ -1,0 +1,34 @@
+createTournament:
+  handler: src/handlers/tournament/createTournament.handler
+  events:
+    - http:
+        method: POST
+        path: /tournament
+
+getTournament:
+  handler: src/handlers/tournament/getTournament.handler
+  events:
+    - http:
+        method: GET
+        path: /tournament/{id}
+
+getTournaments:
+  handler: src/handlers/tournament/getTournaments.handler
+  events:
+    - http:
+        method: GET
+        path: /tournament
+
+updateTournament:
+  handler: src/handlers/tournament/updateTournament.handler
+  events:
+    - http:
+        method: PATCH
+        path: /tournament/{id}
+
+deleteTournament:
+  handler: src/handlers/tournament/deleteTournament.handler
+  events:
+    - http:
+        method: DELETE
+        path: /tournament/{id}
