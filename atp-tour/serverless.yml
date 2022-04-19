@@ -10,6 +10,15 @@ provider:
   runtime: nodejs12.x
   memorySize: 256
   stage: ${opt:stage, 'dev'}
+  region: eu-west-1
+  environment:
+    TOURNAMENT_TABLE_NAME: ${self:custom.TournamentTable.name}
+  iamRoleStatements:
+    - ${file(iam/TournamentIAM.yml):TournamentIAM}
+
+resources:
+  Resources:
+    TournamentTable: $(file(resources/TournamentTable.yml):TournamentTable)
   
 functions:
   hello:
@@ -18,3 +27,10 @@ functions:
       - http:
           method: GET
           path: /hello
+
+custom:
+  TournamentTable:
+    name: !Ref TournamentTable
+    arn: !GetAtt TournamentTable.Arn
+  bundle:
+    linting: false

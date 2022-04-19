@@ -1,0 +1,6 @@
+TournamentTableIAM:
+  Effect: Allow
+  Action: 
+    - dynamoDB: PutItem
+  Resource: 
+    - ${self:custom.TournamentTable.arn}
