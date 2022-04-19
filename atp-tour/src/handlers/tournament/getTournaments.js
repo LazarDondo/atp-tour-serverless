@@ -4,7 +4,7 @@ import createError from 'http-errors';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-export async function getTournaments(event, context){
+async function getTournaments(event, context){
     let tournaments;
     
     try{
@@ -20,8 +20,8 @@ export async function getTournaments(event, context){
 
     return {
         statusCode: 200,
-        body: JSON.parse(tournaments)
+        body: JSON.stringify(tournaments)
     }
 }
 
-export const handler = commonMiddleware(tournaments);
+export const handler = commonMiddleware(getTournaments);

@@ -41,6 +41,13 @@ functions:
           method: GET
           path: /tournament
 
+  updateTournament:
+    handler: src/handlers/tournament/updateTournament.handler
+    events:
+      - http:
+          method: PATCH
+          path: /tournament/{id}
+
 custom:
   TournamentTable:
     name: !Ref TournamentTable

@@ -3,7 +3,7 @@ import AWS from 'aws-sdk';
 import commonMiddleware from '../../lib/commonMiddleware';
 import createError from 'http-errors';
 import validator from '@middy/validator';
-import createTournamentSchema from '../../lib/schemas/createTournamentSchema';
+import createTournamentSchema from '../../lib/schemas/tournament/createTournamentSchema';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
