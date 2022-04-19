@@ -1,0 +1,7 @@
+CountryTableIAM:
+  Effect: Allow
+  Action: 
+    - dynamodb:GetItem
+    - dynamodb:Scan
+  Resource: 
+    - ${self:custom.CountryTable.arn}

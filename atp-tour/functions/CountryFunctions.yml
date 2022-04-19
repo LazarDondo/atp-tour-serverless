@@ -1,0 +1,6 @@
+getCountries:
+  handler: src/handlers/country/getCountries.handler
+  events:
+    - http:
+        method: GET
+        path: /country

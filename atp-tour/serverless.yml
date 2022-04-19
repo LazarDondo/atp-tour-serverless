@@ -13,18 +13,22 @@ provider:
   environment:
     TOURNAMENT_TABLE_NAME: ${self:custom.TournamentTable.name}
     PLAYER_TABLE_NAME: ${self:custom.PlayerTable.name}
+    COUNTRY_TABLE_NAME: ${self:custom.CountryTable.name}
   iamRoleStatements:
     - ${file(iam/TournamentTableIAM.yml):TournamentTableIAM}
     - ${file(iam/PlayerTableIAM.yml):PlayerTableIAM}
+    - ${file(iam/CountryTableIAM.yml):CountryTableIAM}
 
 resources:
   Resources:
     TournamentTable: ${file(resources/TournamentTable.yml):TournamentTable}
     PlayerTable: ${file(resources/PlayerTable.yml):PlayerTable}
+    CountryTable: ${file(resources/CountryTable.yml):CountryTable}
   
 functions:
   - ${file(functions/TournamentFunctions.yml)}
   - ${file(functions/PlayerFunctions.yml)}
+  - ${file(functions/CountryFunctions.yml)}
 
 custom:
   TournamentTable:
@@ -33,5 +37,8 @@ custom:
   PlayerTable:
     name: !Ref PlayerTable
     arn: !GetAtt PlayerTable.Arn
+  CountryTable:
+    name: !Ref CountryTable
+    arn: !GetAtt CountryTable.Arn
   bundle:
     linting: false
