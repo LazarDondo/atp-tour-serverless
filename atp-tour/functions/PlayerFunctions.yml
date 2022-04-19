@@ -4,3 +4,10 @@ createPlayer:
     - http:
         method: POST
         path: /player
+
+getPlayer:
+  handler: src/handlers/player/getPlayer.handler
+  events:
+    - http:
+        method: GET
+        path: /player/{id}
