@@ -6,6 +6,19 @@ PlayerTable:
     AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
+      - AttributeName: lastName
+        AttributeType: S
+      - AttributeName: livePoints
+        AttributeType: N
     KeySchema:
       - AttributeName: id
         KeyType: HASH
+    GlobalSecondaryIndexes:
+      - IndexName: lastNameAndLivePoints
+        KeySchema:
+          - AttributeName: lastName
+            KeyType: HASH
+          - AttributeName: livePoints
+            KeyType: RANGE
+        Projection:
+          ProjectionType: ALL

@@ -5,5 +5,7 @@ PlayerTableIAM:
     - dynamodb:GetItem
     - dynamodb:Scan
     - dynamodb:UpdateItem
+    - dynamodb:Query
   Resource: 
     - ${self:custom.PlayerTable.arn}
+    - !Join ['/', ['${self:custom.PlayerTable.arn}', 'index', 'lastNameAndLivePoints']]
