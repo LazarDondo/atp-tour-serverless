@@ -4,23 +4,24 @@ import createError from 'http-errors';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-async function getCountries(event, context){
-    let country;
-    
+async function findAllCountries(){    
     try{
         const result = await dynamodb.scan({
             TableName: process.env.COUNTRY_TABLE_NAME
         }).promise();
-        country = result.Items;
+        return result.Items;
     }
     catch(error){
         console.log(error);
         throw new createError.InternalServerError(error);
     }
+}
 
+async function getCountries(event, context){
+    const countries = await findAllCountries();
     return {
         statusCode: 200,
-        body: JSON.stringify(country)
+        body: JSON.stringify(countries)
     }
 }
 
