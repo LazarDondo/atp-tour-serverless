@@ -6,5 +6,7 @@ TournamentTableIAM:
     - dynamodb:Scan
     - dynamodb:UpdateItem
     - dynamodb:DeleteItem
+    - dynamodb:Query
   Resource: 
     - ${self:custom.TournamentTable.arn}
+    - !Join ['/', ['${self:custom.TournamentTable.arn}', 'index', 'nameAndStartDate']]

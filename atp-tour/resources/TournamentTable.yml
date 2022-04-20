@@ -6,6 +6,19 @@ TournamentTable:
     AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
+      - AttributeName: name
+        AttributeType: S
+      - AttributeName: startDate
+        AttributeType: S
     KeySchema:
       - AttributeName: id
         KeyType: HASH
+    GlobalSecondaryIndexes:
+      - IndexName: nameAndStartDate
+        KeySchema:
+          - AttributeName: name
+            KeyType: HASH
+          - AttributeName: startDate
+            KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
