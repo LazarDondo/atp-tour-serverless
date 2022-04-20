@@ -7,9 +7,7 @@ import updatePlayerSchema from '../../lib/schemas/player/updatePlayerSchema';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-async function updatePlayer(event, context) {
-    const { id } = event.pathParameters;
-    const { firstName, lastName } = event.body;
+async function editPlayer(id, firstName, lastName) {
     await getPlayerById(id);
 
     const params = {
@@ -23,17 +21,20 @@ async function updatePlayer(event, context) {
         ReturnValues: 'ALL_NEW'
     }
 
-    let updatedPlayer;
-
     try {
         const result = await dynamodb.update(params).promise();
-        updatedPlayer = result.Attributes;
+        return result.Attributes;
     }
     catch (error) {
         console.log(error);
         throw new createError.InternalServerError(error);
     }
+}
 
+async function updatePlayer(event, context) {
+    const { id } = event.pathParameters;
+    const { firstName, lastName } = event.body;
+    const updatedPlayer = await editPlayer(id, firstName, lastName);
     return {
         statusCode: 200,
         body: JSON.stringify(updatedPlayer)

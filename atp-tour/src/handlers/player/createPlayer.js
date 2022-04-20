@@ -5,13 +5,13 @@ import createError from 'http-errors';
 import validator from '@middy/validator';
 import createPlayerSchema from '../../lib/schemas/player/createPlayerSchema';
 import getCountryById from '../country/getCountry';
+import {validateDateOfBirth} from './validation'
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-async function createPlayer(event, context) {
-    const {firstName, lastName, birthCountry, dateOfBirth, currentPoints} = event.body;
-
+async function addPlayer(firstName, lastName, birthCountry, dateOfBirth, currentPoints) {
     await getCountryById(birthCountry);
+    await validateDateOfBirth(dateOfBirth);
 
     const player = {
         id: uuid(),
@@ -28,11 +28,17 @@ async function createPlayer(event, context) {
             TableName: process.env.PLAYER_TABLE_NAME,
             Item: player
         }).promise();
+        return player;
     }
     catch (error) {
         console.log(error);
         throw new createError.InternalServerError(error);
     }
+}
+
+async function createPlayer(event, context) {
+    const { firstName, lastName, birthCountry, dateOfBirth, currentPoints } = event.body;
+    const player = await addPlayer(firstName, lastName, birthCountry, dateOfBirth, currentPoints);
     return {
         statusCode: 201,
         body: JSON.stringify(player),

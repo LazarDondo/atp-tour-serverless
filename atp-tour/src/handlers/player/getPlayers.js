@@ -4,23 +4,24 @@ import createError from 'http-errors';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-async function getPlayers(event, context){
-    let player;
-    
-    try{
+async function findAllPlayers() {
+    try {
         const result = await dynamodb.scan({
             TableName: process.env.PLAYER_TABLE_NAME
         }).promise();
-        player = result.Items;
+        return result.Items;
     }
-    catch(error){
+    catch (error) {
         console.log(error);
         throw new createError.InternalServerError(error);
     }
+}
 
+async function getPlayers(event, context) {
+    const players = await findAllPlayers();
     return {
         statusCode: 200,
-        body: JSON.stringify(player)
+        body: JSON.stringify(players)
     }
 }
 
