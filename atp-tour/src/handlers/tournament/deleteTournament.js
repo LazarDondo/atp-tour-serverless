@@ -5,25 +5,29 @@ import { getTournamentById } from './getTournament';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-async function deleteTournament(event, context){
-    const {id} = event.pathParameters;
+async function removeTournament(id) {
     await getTournamentById(id);
 
     const params = {
         TableName: process.env.TOURNAMENT_TABLE_NAME,
-        Key: {id}
+        Key: { id }
     };
 
-    try{
+    try {
         await dynamodb.delete(params).promise();
         return {
             statusCode: 200,
             body: 'Tournament deleted successfully'
         }
     }
-    catch(error){
+    catch (error) {
         throw new createError.InternalServerError(error);
     }
+}
+
+async function deleteTournament(event, context) {
+    const { id } = event.pathParameters;
+    removeTournament(id);
 }
 
 export const handler = commonMiddleware(deleteTournament);

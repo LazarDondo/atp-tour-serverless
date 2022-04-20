@@ -24,6 +24,30 @@ export async function getTournamentById(id) {
     return tournament;
 }
 
+export async function getTournamentByName(name) {
+    let tournament;
+    try {
+        const params = {
+            TableName: process.env.TOURNAMENT_TABLE_NAME,
+            IndexName: 'nameAndStartDate',
+            KeyConditionExpression: '#name = :name',
+            ExpressionAttributeNames: {
+                '#name': 'name'
+            },
+            ExpressionAttributeValues: {
+                ':name': name
+            }
+        }
+        const result = await dynamodb.query(params).promise();
+        tournament = result.Items;
+    }
+    catch (error) {
+        console.log(error);
+        throw new createError.InternalServerError(error);
+    }
+    return tournament;
+}
+
 async function getTournament(event, context) {
     const { id } = event.pathParameters;
     const tournament = await getTournamentById(id);

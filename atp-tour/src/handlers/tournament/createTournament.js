@@ -5,16 +5,23 @@ import createError from 'http-errors';
 import validator from '@middy/validator';
 import createTournamentSchema from '../../lib/schemas/tournament/createTournamentSchema';
 import getCountryById from '../country/getCountry';
+import { getTournamentByName } from './getTournament';
+import { prepareDates } from './validation';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-async function createTournament(event, context) {
-    const { name, startDate, hostCountry, tournamentType } = event.body;
+async function addTournament(name, startDate, hostCountry, tournamentType) {
 
     await getCountryById(hostCountry);
 
-    let completionDate = new Date(startDate);
-    completionDate.setDate(completionDate.getDate() + 7);
+    name += '-' + new Date(startDate).getFullYear();
+    const foundTournament = await getTournamentByName(name);
+
+    if (foundTournament.length != 0) {
+        throw new createError.BadRequest(`Tournament ${name} already exists`);
+    }
+
+    const completionDate = await prepareDates(startDate);
 
     const tournament = {
         id: uuid(),
@@ -30,11 +37,17 @@ async function createTournament(event, context) {
             TableName: process.env.TOURNAMENT_TABLE_NAME,
             Item: tournament
         }).promise();
+        return tournament;
     }
     catch (error) {
         console.log(error);
         throw new createError.InternalServerError(error);
     }
+}
+
+async function createTournament(event, context) {
+    let { name, startDate, hostCountry, tournamentType } = event.body;
+    const tournament = await addTournament(name, startDate, hostCountry, tournamentType);
     return {
         statusCode: 201,
         body: JSON.stringify(tournament),
