@@ -1,0 +1,6 @@
+MatchTableIAM:
+  Effect: Allow
+  Action: 
+    - dynamodb:PutItem
+  Resource: 
+    - ${self:custom.MatchTable.arn}

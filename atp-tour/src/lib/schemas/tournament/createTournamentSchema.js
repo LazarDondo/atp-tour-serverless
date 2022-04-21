@@ -18,9 +18,17 @@ const schema = {
                     type: 'string',
                     enum: ['Grand Slam', 'Masters 1000'],
                     default: 'Grand Slam'
+                },
+                participants: {
+                    type: 'array',
+                    items: {
+                        type: 'object'
+                    },
+                    minItems: 1,
+                    uniqueItems: true,
                 }
             },
-            required: ['name', 'startDate', 'hostCountry']
+            required: ['name', 'startDate', 'hostCountry', 'participants']
         }
     },
     required: ['body']

@@ -1,0 +1,6 @@
+IncomeTableIAM:
+  Effect: Allow
+  Action: 
+    - dynamodb:PutItem
+  Resource: 
+    - ${self:custom.IncomeTable.arn}

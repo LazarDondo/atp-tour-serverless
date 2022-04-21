@@ -7,10 +7,12 @@ import createTournamentSchema from '../../lib/schemas/tournament/createTournamen
 import getCountryById from '../country/getCountry';
 import { getTournamentByName } from './getTournament';
 import { prepareDates } from './validation';
+import { createMatches } from '../matches/createMatches';
+import { createIncomes } from '../income/createIncome';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-async function addTournament(name, startDate, hostCountry, tournamentType) {
+async function addTournament(name, startDate, hostCountry, tournamentType, participants) {
 
     await getCountryById(hostCountry);
 
@@ -37,6 +39,9 @@ async function addTournament(name, startDate, hostCountry, tournamentType) {
             TableName: process.env.TOURNAMENT_TABLE_NAME,
             Item: tournament
         }).promise();
+
+        createMatches(tournament, participants);
+        await createIncomes(tournament.id, participants);
         return tournament;
     }
     catch (error) {
@@ -46,8 +51,8 @@ async function addTournament(name, startDate, hostCountry, tournamentType) {
 }
 
 async function createTournament(event, context) {
-    let { name, startDate, hostCountry, tournamentType } = event.body;
-    const tournament = await addTournament(name, startDate, hostCountry, tournamentType);
+    let { name, startDate, hostCountry, tournamentType, participants } = event.body;
+    const tournament = await addTournament(name, startDate, hostCountry, tournamentType, participants);
     return {
         statusCode: 201,
         body: JSON.stringify(tournament),
