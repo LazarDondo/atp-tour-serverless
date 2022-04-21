@@ -1,0 +1,8 @@
+StatisticsTableIAM:
+  Effect: Allow
+  Action: 
+    - dynamodb:PutItem
+    - dynamodb:GetItem
+    - dynamodb:UpdateItem
+  Resource: 
+    - ${self:custom.StatisticsTable.arn}

@@ -1,0 +1,20 @@
+createStatistics:
+  handler: src/handlers/statistics/createStatistics.handler
+  events:
+    - http:
+        method: POST
+        path: /statistics
+
+getStatistics:
+  handler: src/handlers/statistics/getStatistics.handler
+  events:
+    - http:
+        method: GET
+        path: /statistics/{id}
+
+updateStatistics:
+  handler: src/handlers/statistics/updateStatistics.handler
+  events:
+    - http:
+        method: PATCH
+        path: /statistics/{id}

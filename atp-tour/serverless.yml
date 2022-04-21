@@ -14,21 +14,32 @@ provider:
     TOURNAMENT_TABLE_NAME: ${self:custom.TournamentTable.name}
     PLAYER_TABLE_NAME: ${self:custom.PlayerTable.name}
     COUNTRY_TABLE_NAME: ${self:custom.CountryTable.name}
+    MATCH_TABLE_NAME: ${self:custom.MatchTable.name}
+    INCOME_TABLE_NAME: ${self:custom.IncomeTable.name}
+    STATISTICS_TABLE_NAME: ${self:custom.StatisticsTable.name}
+    
   iamRoleStatements:
     - ${file(iam/TournamentTableIAM.yml):TournamentTableIAM}
     - ${file(iam/PlayerTableIAM.yml):PlayerTableIAM}
     - ${file(iam/CountryTableIAM.yml):CountryTableIAM}
+    - ${file(iam/MatchTableIAM.yml):MatchTableIAM}
+    - ${file(iam/IncomeTableIAM.yml):IncomeTableIAM}
+    - ${file(iam/StatisticsTableIAM.yml):StatisticsTableIAM}
 
 resources:
   Resources:
     TournamentTable: ${file(resources/TournamentTable.yml):TournamentTable}
     PlayerTable: ${file(resources/PlayerTable.yml):PlayerTable}
     CountryTable: ${file(resources/CountryTable.yml):CountryTable}
+    MatchTable: ${file(resources/MatchTable.yml):MatchTable}
+    IncomeTable: ${file(resources/IncomeTable.yml):IncomeTable}
+    StatisticsTable: ${file(resources/StatisticsTable.yml):StatisticsTable}
   
 functions:
   - ${file(functions/TournamentFunctions.yml)}
   - ${file(functions/PlayerFunctions.yml)}
   - ${file(functions/CountryFunctions.yml)}
+  - ${file(functions/StatisticsFunctions.yml)}
 
 custom:
   TournamentTable:
@@ -40,5 +51,14 @@ custom:
   CountryTable:
     name: !Ref CountryTable
     arn: !GetAtt CountryTable.Arn
+  MatchTable:
+    name: !Ref MatchTable
+    arn: !GetAtt MatchTable.Arn
+  IncomeTable:
+    name: !Ref IncomeTable
+    arn: !GetAtt IncomeTable.Arn
+  StatisticsTable:
+    name: !Ref StatisticsTable
+    arn: !GetAtt StatisticsTable.Arn
   bundle:
     linting: false
