@@ -42,6 +42,7 @@ functions:
   - ${file(functions/StatisticsFunctions.yml)}
 
 custom:
+  authorizer: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth-service-${self:provider.stage}-auth
   TournamentTable:
     name: !Ref TournamentTable
     arn: !GetAtt TournamentTable.Arn

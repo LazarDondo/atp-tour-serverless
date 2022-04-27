@@ -4,6 +4,7 @@ createStatistics:
     - http:
         method: POST
         path: /statistics
+        authorizer: ${self:custom.authorizer}
 
 getStatistics:
   handler: src/handlers/statistics/getStatistics.handler
@@ -11,6 +12,7 @@ getStatistics:
     - http:
         method: GET
         path: /statistics/{id}
+        authorizer: ${self:custom.authorizer}
 
 updateStatistics:
   handler: src/handlers/statistics/updateStatistics.handler
@@ -18,3 +20,4 @@ updateStatistics:
     - http:
         method: PATCH
         path: /statistics/{id}
+        authorizer: ${self:custom.authorizer}

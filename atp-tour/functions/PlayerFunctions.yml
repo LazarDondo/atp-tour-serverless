@@ -11,6 +11,7 @@ getPlayer:
     - http:
         method: GET
         path: /player/{id}
+        authorizer: ${self:custom.authorizer}
 
 getPlayers:
   handler: src/handlers/player/getPlayers.handler
@@ -18,6 +19,7 @@ getPlayers:
     - http:
         method: GET
         path: /player
+        authorizer: ${self:custom.authorizer}
 
 updatePlayer:
   handler: src/handlers/player/updatePlayer.handler
@@ -25,3 +27,4 @@ updatePlayer:
     - http:
         method: PATCH
         path: /player/{id}
+        authorizer: ${self:custom.authorizer}

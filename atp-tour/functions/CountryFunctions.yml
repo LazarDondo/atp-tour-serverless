@@ -4,3 +4,4 @@ getCountries:
     - http:
         method: GET
         path: /country
+        authorizer: ${self:custom.authorizer}

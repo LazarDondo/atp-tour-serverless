@@ -4,6 +4,7 @@ createTournament:
     - http:
         method: POST
         path: /tournament
+        authorizer: ${self:custom.authorizer}
 
 getTournament:
   handler: src/handlers/tournament/getTournament.handler
@@ -11,6 +12,7 @@ getTournament:
     - http:
         method: GET
         path: /tournament/{id}
+        authorizer: ${self:custom.authorizer}
 
 getTournaments:
   handler: src/handlers/tournament/getTournaments.handler
@@ -18,6 +20,7 @@ getTournaments:
     - http:
         method: GET
         path: /tournament
+        authorizer: ${self:custom.authorizer}
 
 updateTournament:
   handler: src/handlers/tournament/updateTournament.handler
@@ -25,6 +28,7 @@ updateTournament:
     - http:
         method: PATCH
         path: /tournament/{id}
+        authorizer: ${self:custom.authorizer}
 
 deleteTournament:
   handler: src/handlers/tournament/deleteTournament.handler
@@ -32,3 +36,4 @@ deleteTournament:
     - http:
         method: DELETE
         path: /tournament/{id}
+        authorizer: ${self:custom.authorizer}
