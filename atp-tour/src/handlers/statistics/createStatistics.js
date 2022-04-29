@@ -4,6 +4,8 @@ import commonMiddleware from '../../lib/commonMiddleware';
 import createError from 'http-errors';
 import validator from '@middy/validator';
 import createStatisticsSchema from '../../lib/schemas/statistics/createStatisticsSchema';
+import query from '../../lib/db-query';
+import { create as createStatisticsSQL } from '../../lib/queries/statistics';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -31,9 +33,30 @@ async function addStatistics(tournamentId, firstPlayerId, secondPlayerId, firstP
     }
 }
 
+async function addStatisticsMySQL(tournamentId, firstPlayerId, secondPlayerId, firstPlayerPoints, secondPlayerPoints) {
+    const statistics = [
+        [
+            tournamentId,
+            firstPlayerId,
+            secondPlayerId,
+            firstPlayerPoints,
+            secondPlayerPoints
+        ]
+    ];
+
+    try {
+        await query(createStatisticsSQL, [statistics]);
+        return statistics;
+    }
+    catch (error) {
+        console.log(error);
+        throw new createError.InternalServerError(error);
+    }
+}
+
 async function createStatistics(event, context) {
     const { tournamentId, firstPlayerId, secondPlayerId, firstPlayerPoints, secondPlayerPoints } = event.body;
-    const statistics = await addStatistics(tournamentId, firstPlayerId, secondPlayerId, firstPlayerPoints, secondPlayerPoints);
+    const statistics = await addStatisticsMySQL(tournamentId, firstPlayerId, secondPlayerId, firstPlayerPoints, secondPlayerPoints);
     return {
         statusCode: 201,
         body: JSON.stringify(statistics),

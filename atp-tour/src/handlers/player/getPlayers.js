@@ -1,6 +1,8 @@
 import AWS from 'aws-sdk';
 import commonMiddleware from '../../lib/commonMiddleware';
 import createError from 'http-errors';
+import query from '../../lib/db-query';
+import { getAll as getAllPlayersSQL } from '../../lib/queries/player';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -17,8 +19,18 @@ async function findAllPlayers() {
     }
 }
 
+async function findAllPlayersMySQL() {
+    try {
+        return await query(getAllPlayersSQL, []);
+    }
+    catch (error) {
+        console.log(error);
+        throw new createError.InternalServerError(error);
+    }
+}
+
 async function getPlayers(event, context) {
-    const players = await findAllPlayers();
+    const players = await findAllPlayersMySQL();
     return {
         statusCode: 200,
         body: JSON.stringify(players)

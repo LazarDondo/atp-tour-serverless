@@ -1,9 +1,11 @@
 import AWS from 'aws-sdk';
 import commonMiddleware from '../../lib/commonMiddleware';
 import createError from 'http-errors';
-import { getPlayerById } from './getPlayer';
+import { getPlayerById, getPlayerByIdMySQL } from './getPlayer';
 import validator from '@middy/validator';
 import updatePlayerSchema from '../../lib/schemas/player/updatePlayerSchema';
+import query from '../../lib/db-query';
+import { update as updatePlayerSQL } from '../../lib/queries/player';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -31,10 +33,30 @@ async function editPlayer(id, firstName, lastName) {
     }
 }
 
+async function editPlayerMySQL(id, firstName, lastName) {
+    let player = await getPlayerByIdMySQL(id);
+    const updatedPlayer = [
+        firstName,
+        lastName,
+        id
+    ];
+
+    try {
+        await query(updatePlayerSQL, updatedPlayer);
+        player.firstName = firstName;
+        player.lastName = lastName;
+        return player;
+    }
+    catch (error) {
+        console.log(error);
+        throw new createError.InternalServerError(error);
+    }
+}
+
 async function updatePlayer(event, context) {
     const { id } = event.pathParameters;
     const { firstName, lastName } = event.body;
-    const updatedPlayer = await editPlayer(id, firstName, lastName);
+    const updatedPlayer = await editPlayerMySQL(id, firstName, lastName);
     return {
         statusCode: 200,
         body: JSON.stringify(updatedPlayer)

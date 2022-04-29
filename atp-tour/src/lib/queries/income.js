@@ -1,0 +1,1 @@
+export const create = 'INSERT INTO Income (tournament_id, player_id, points) VALUES ?;';

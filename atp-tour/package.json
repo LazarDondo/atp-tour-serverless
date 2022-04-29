@@ -21,9 +21,12 @@
     "@middy/http-event-normalizer": "^2.5.7",
     "@middy/http-json-body-parser": "^2.5.7",
     "@middy/validator": "^2.5.7",
+    "@prisma/client": "^3.13.0",
     "aws-sdk": "^2.1116.0",
     "http-errors": "^2.0.0",
     "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "prisma": "^3.13.0",
     "uuid": "^8.3.2"
   }
 }

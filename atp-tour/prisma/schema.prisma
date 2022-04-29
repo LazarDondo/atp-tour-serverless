@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Country {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(50)
+  codeName String @db.VarChar(3) @map("code_name")
+  tournaments Tournament[]
+  players Player[]
+}
+
+model Tournament {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(50) @map("tournament_name")
+  startDate DateTime @map("start_date")
+  completionDate DateTime @map("completion_date")
+  country Country @relation(fields : [hostCountryId], references: [id])
+  hostCountryId Int @map("host_country_id")
+  tournamentType String @db.VarChar(30) @map("tournament_type")
+  match Match[]
+  incomes Income[]
+}
+
+model Player {
+  id Int @id @default(autoincrement())
+  firstName String @db.VarChar(50) @map("first_name")
+  lastName String @db.VarChar(50) @map("last_name")
+  country Country @relation(fields: [birthCountryId], references: [id])
+  birthCountryId Int @map("birth_country_id")
+  dateOfBirth DateTime @map("date_of_birth")
+  currentPoints Int @map("current_points")
+  livePoints Int? @map("live_points")
+  rank Int? @map("player_rank")
+  firstPlayerMatches Match[] @relation(name: "firstPlayer")
+  secondPlayerMatches Match[] @relation(name: "secondPlayer")
+  incomes Income[]
+}
+
+model Income {
+  tournament Tournament @relation(fields: [tournamentId], references: [id])
+  tournamentId Int @map("tournament_id")
+  player Player @relation(fields: [playerId], references: [id])
+  playerId Int @map("player_id")
+  points Int
+  @@id([tournamentId, playerId])
+}
+
+model Match {
+  tournament Tournament @relation(fields: [tournamentId], references: [id])
+  tournamentId Int @map("tournament_id")
+  firstPlayer Player @relation(name:"firstPlayer", fields: [firstPlayerId], references: [id])
+  firstPlayerId Int @map("first_player_id")
+  secondPlayer Player @relation(name: "secondPlayer", fields: [secondPlayerId], references: [id])
+  secondPlayerId Int @map("second_player_id")
+  matchDate DateTime @map("match_date")
+  round String @db.VarChar(20)
+  result String @db.VarChar(5)
+  winnerId Int? @map("winner_id")
+  statistics Statistics?
+  @@id([tournamentId, firstPlayerId, secondPlayerId])
+  @@map("Matches")
+}
+
+model Statistics{
+  id: Int
+  match Match @relation(fields: [tournamentId, firstPlayerId, secondPlayerId], references: [tournamentId, firstPlayerId, secondPlayerId])
+  tournamentId Int @map("tournament_id")
+  firstPlayerId Int @map("first_player_id")
+  secondPlayerId Int @map("second_player_id")
+  firstPlayerPoints Int @map("first_player_points")
+  secondPlayerPoints Int  @map("second_player_points")
+  @@id([id, tournamentId, firstPlayerId, secondPlayerId])
+}
+
+
+
+
+
+
+
+
+
+

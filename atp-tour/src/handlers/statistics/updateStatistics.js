@@ -1,9 +1,11 @@
 import AWS from 'aws-sdk';
 import commonMiddleware from '../../lib/commonMiddleware';
 import createError from 'http-errors';
-import { getStatisticsById } from './getStatistics';
+import { getStatisticsById, getStatisticsByIdMySQL } from './getStatistics';
 import validator from '@middy/validator';
 import updateStatisticsSchema from '../../lib/schemas/statistics/updateStatisticsSchema';
+import query from '../../lib/db-query';
+import { update as updateStatisticsSQL } from '../../lib/queries/statistics';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -31,10 +33,31 @@ async function editStatistics(id, firstPlayerPoints, secondPlayerPoints) {
     }
 }
 
+async function editStatisticsMySQL(id, firstPlayerPoints, secondPlayerPoints) {
+    let statistics = await getStatisticsByIdMySQL(id);
+
+    const updatedStatistics = [
+        firstPlayerPoints,
+        secondPlayerPoints,
+        id
+    ];
+
+    try {
+        await query(updateStatisticsSQL, updatedStatistics);
+        statistics.firstPlayerPoints = firstPlayerPoints;
+        statistics.secondPlayerPoints = secondPlayerPoints;
+        return statistics;
+    }
+    catch (error) {
+        console.log(error);
+        throw new createError.InternalServerError(error);
+    }
+}
+
 async function updateStatistics(event, context) {
     const { id } = event.pathParameters;
     const { firstPlayerPoints, secondPlayerPoints } = event.body;
-    const updatedStatistics = await editStatistics(id, firstPlayerPoints, secondPlayerPoints);
+    const updatedStatistics = await editStatisticsMySQL(id, firstPlayerPoints, secondPlayerPoints);
     return {
         statusCode: 200,
         body: JSON.stringify(updatedStatistics)
